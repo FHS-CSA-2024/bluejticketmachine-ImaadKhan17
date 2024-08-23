@@ -8,7 +8,7 @@ package src.main.java;
  * sensible amounts of money, and will only print a ticket
  * if enough money has been input.
  * 
- * @author David J. Barnes and Michael Kölling
+ * @author David J. Barnes and Michael KÃ¶lling
  * @version 2016.02.29
  */
 public class SmarterTicketMachine
@@ -46,6 +46,10 @@ public class SmarterTicketMachine
     {
         return balance;
     }
+    
+    public int getTotal(){
+        return total;
+    }
 
     /**
      * Receive an amount of money from a customer.
@@ -53,12 +57,12 @@ public class SmarterTicketMachine
      */
     public void insertMoney(int amount)
     {
-        if(amount > 0) {
-            balance = balance + amount;
-        }
-        else {
+        if(amount <= 0) {
             System.out.println("Use a positive amount rather than: " +
                                amount);
+        }
+        else {
+            balance = balance + amount;
         }
     }
 
@@ -69,7 +73,10 @@ public class SmarterTicketMachine
      */
     public void printTicket()
     {
-        if(balance >= price) {
+        int amountLeftToPay = price - balance;
+        
+        if(amountLeftToPay <= 0) {
+            
             // Simulate the printing of a ticket.
             System.out.println("##################");
             System.out.println("# The BlueJ Line");
@@ -81,13 +88,20 @@ public class SmarterTicketMachine
             // Update the total collected with the price.
             total = total + price;
             // Reduce the balance by the price.
-            balance = balance - price;
+            balance = -amountLeftToPay;
         }
         else {
             System.out.println("You must insert at least: " +
-                               (price - balance) + " more cents.");
+                               (amountLeftToPay) + " more cents.");
                     
         }
+    }
+    
+    public int emptyMachine()
+    {
+        int tempMoney = total;
+        total = 0;
+        return tempMoney;
     }
 
     /**
